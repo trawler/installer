@@ -36,8 +36,8 @@ const (
 	kubeCAKeyPath                = "generated/tls/kube-ca.key"
 	kubeletCertPath              = "generated/tls/kubelet.crt"
 	kubeletKeyPath               = "generated/tls/kubelet.key"
-	clusterAPIServerCertPath     = "generated/tls/cluster-apiserver-ca.crt"
-	clusterAPIServerKeyPath      = "generated/tls/cluster-apiserver-ca.key"
+	clusterAPIServerCertPath     = "generated/tls/machine-apiserver-ca.crt"
+	clusterAPIServerKeyPath      = "generated/tls/machine-apiserver-ca.key"
 	osAPIServerCertPath          = "generated/tls/openshift-apiserver.crt"
 	osAPIServerKeyPath           = "generated/tls/openshift-apiserver.key"
 	rootCACertPath               = "generated/tls/root-ca.crt"
@@ -260,13 +260,13 @@ func (c *ConfigGenerator) GenerateTLSConfig(clusterDir string) error {
 
 	// Cluster API cert
 	cfg = &tls.CertCfg{
-		Subject:   pkix.Name{CommonName: "cluster-apiserver", OrganizationalUnit: []string{"bootkube"}},
+		Subject:   pkix.Name{CommonName: "machine-apiserver", OrganizationalUnit: []string{"bootkube"}},
 		KeyUsages: x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature | x509.KeyUsageCertSign,
 		Validity:  validityTenYears,
 		IsCA:      true,
 	}
 	if _, _, err := generateCert(clusterDir, aggregatorCAKey, aggregatorCACert, clusterAPIServerKeyPath, clusterAPIServerCertPath, cfg, true); err != nil {
-		return fmt.Errorf("failed to generate cluster-apiserver CA: %v", err)
+		return fmt.Errorf("failed to generate machine-apiserver CA: %v", err)
 	}
 
 	// Service Account private and public key.
