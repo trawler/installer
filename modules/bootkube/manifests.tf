@@ -3,15 +3,18 @@ variable "manifest_names" {
     "01-tectonic-namespace.yaml",
     "02-ingress-namespace.yaml",
     "03-openshift-web-console-namespace.yaml",
+    "04-cluster-apiserver-namespace.yaml",
     "app-version-kind.yaml",
+    "app-version-machine-apiserver.yaml",
     "app-version-tectonic-network.yaml",
     "app-version-tnc.yaml",
+    "cluster-apiserver-secret.yaml",
     "kube-apiserver-secret.yaml",
     "kube-cloud-config.yaml",
     "kube-controller-manager-secret.yaml",
+    "machine-apiserver-operator.yaml",
     "node-config-kind.yaml",
     "openshift-apiserver-secret.yaml",
-    "cluster-apiserver-secret.yaml",
     "pull.json",
     "tectonic-network-operator.yaml",
     "tectonic-node-controller-operator.yaml",
@@ -27,6 +30,7 @@ data "template_file" "manifest_file_list" {
   vars {
     tectonic_network_operator_image = "${var.container_images["tectonic_network_operator"]}"
     tnc_operator_image              = "${var.container_images["tnc_operator"]}"
+    machineapi_operator_image       = "${var.container_images["machine_apiserver_operator"]}"
 
     cloud_provider_config = "${var.cloud_provider_config}"
 

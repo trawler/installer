@@ -1,0 +1,46 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: machine-apiserver-operator
+  namespace: kube-system
+  labels:
+    k8s-app: machine-apiserver-operator
+    managed-by-channel-operator: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: machine-apiserver-operator
+  template:
+    metadata:
+      labels:
+        k8s-app: machine-apiserver-operator
+        tectonic-app-version-name: machine-api
+    spec:
+      containers:
+      - name: machine-apiserver
+        image: ${machineapi_operator_image}
+        command:
+        - "/machine-api-operator"
+        args:
+        - --manifest-dir=/manifests
+        - --v=6
+        resources:
+          limits:
+            cpu: 20m
+            memory: 50Mi
+          requests:
+            cpu: 20m
+            memory: 50Mi
+      imagePullSecrets:
+      - name: coreos-pull-secret
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+      restartPolicy: Always
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+      tolerations:
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
